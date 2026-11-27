@@ -229,6 +229,26 @@ footer{text-align:center;padding:30px 22px 70px;color:var(--mute);font:400 34px 
   <p id="reelcap"></p>
   <p id="galnote" class="note2" style="text-align:center"></p>
   <div style="text-align:center"><button class="btn" id="playbtn" type="button" style="display:none;margin-top:12px">&#9654; Tap to play the video</button></div>
+  <div id="adder" style="display:none;margin-top:28px">
+    <h3 class="script" style="margin-bottom:8px">Add to our moments</h3>
+    <div id="tokbox">
+      <p class="note2">One-time setup: paste your GitHub token. It stays on this phone only.</p>
+      <input id="tok" type="password" placeholder="GitHub token" autocomplete="off" aria-label="GitHub token"><button class="btn ghost" id="toksave" type="button">Save token</button>
+    </div>
+    <input type="file" id="file" accept="image/*,video/*" aria-label="Choose photo or video">
+    <div id="trim">
+      <video id="tv" muted playsinline preload="metadata"></video>
+      <label>Start: <span id="ts">0</span>s<input type="range" id="tr1" min="0" step="0.1" value="0"></label>
+      <label>End: <span id="te">0</span>s<input type="range" id="tr2" min="0" step="0.1" value="0"></label>
+      <p class="note2" id="tinfo">Choose up to 15 seconds. It plays in slow motion with no sound.</p>
+      <button class="btn ghost" id="tprev" type="button">Preview</button>
+    </div>
+    <input id="cap" type="text" placeholder="Caption" aria-label="Caption">
+    <button class="btn" id="up" type="button">Add to our moments</button>
+    <p id="upmsg" class="note2"></p>
+    <ul id="manage"></ul>
+    <button class="btn ghost" id="tokchg" type="button" style="display:none;margin-top:10px">Change token</button>
+  </div>
   </section>
 
 <section>
@@ -472,7 +492,7 @@ function mk(m){
     v.dataset.u=m.url;v.dataset.t=String(m.type||'video/mp4').split(';')[0];
     w.appendChild(v);return w;
   }
-  var e=document.createElement('img');e.alt=m.caption||'Us';e.src=m.url;return e;
+  var e=document.createElement('img');e.alt=m.caption||'Us';e.onerror=function(){e.style.display='none'};e.src=m.url;return e;
 }
 function on(e,y){
   e.classList.toggle('on',y);
@@ -645,6 +665,145 @@ wrender();
 document.addEventListener('touchmove',function(e){if(e.touches&&e.touches.length>1)e.preventDefault()},{passive:false});
 if(window.scrollX)window.scrollTo(0,window.scrollY);
 addEventListener('scroll',function(){if(window.scrollX)window.scrollTo(0,window.scrollY)},{passive:true});
+
+function pickMime(){
+  var c=['video/mp4;codecs=avc1','video/mp4','video/webm;codecs=vp9','video/webm;codecs=vp8','video/webm'];
+  if(!window.MediaRecorder)return '';
+  for(var i=0;i<c.length;i++)if(MediaRecorder.isTypeSupported(c[i]))return c[i];
+  return '';
+}
+async function clip(start,end,prog){
+  var v=document.getElementById('tv'),mime=pickMime();
+  var sc=Math.min(1,640/Math.max(v.videoWidth,v.videoHeight)),w=Math.round(v.videoWidth*sc),h=Math.round(v.videoHeight*sc);
+  var cv=document.createElement('canvas');cv.width=w;cv.height=h;var g=cv.getContext('2d');
+  var rec=new MediaRecorder(cv.captureStream(30),{mimeType:mime,videoBitsPerSecond:1600000}),chunks=[];
+  rec.ondataavailable=function(e){if(e.data&&e.data.size)chunks.push(e.data)};
+  await new Promise(function(r){v.onseeked=r;v.currentTime=start;setTimeout(r,800)});
+  v.muted=true;v.playbackRate=1;
+  return new Promise(function(res,rej){
+    rec.onstop=function(){res(new Blob(chunks,{type:mime.split(';')[0]}))};
+    rec.onerror=rej;
+    rec.start(500);
+    var done=false;
+    function draw(){
+      if(done)return;
+      g.drawImage(v,0,0,w,h);prog(Math.min(1,(v.currentTime-start)/Math.max(end-start,.1)));
+      if(v.currentTime>=end||v.ended){done=true;v.pause();rec.stop();return}
+      requestAnimationFrame(draw);
+    }
+    v.play().then(draw,rej);
+  });
+}
+
+// ---- owner-only uploader: open the site with #admin on the end ----
+(function(){
+  var gm=location.hostname.match(/^(.+)\.github\.io$/);
+  if(location.hash!=='#admin'||!gm)return;
+  var owner=gm[1],repo=location.pathname.split('/')[1]||(owner+'.github.io');
+  var API='https://api.github.com/repos/'+owner+'/'+repo+'/contents/media';
+  document.getElementById('adder').style.display='block';
+  var TK='os-token',tok='';try{tok=localStorage.getItem(TK)||''}catch(e){}
+  var tokbox=document.getElementById('tokbox'),chg=document.getElementById('tokchg');
+  function hdr(){return {'Authorization':'Bearer '+tok,'Accept':'application/vnd.github+json','Content-Type':'application/json'}}
+  function showTok(){tokbox.style.display=tok?'none':'block';chg.style.display=tok?'inline-block':'none'}
+  showTok();
+  document.getElementById('toksave').onclick=function(){
+    var v=document.getElementById('tok').value.trim();if(!v)return;
+    tok=v;try{localStorage.setItem(TK,tok)}catch(e){}
+    document.getElementById('tok').value='';showTok();list();
+  };
+  chg.onclick=function(){tok='';try{localStorage.removeItem(TK)}catch(e){}showTok()};
+  var tv=document.getElementById('tv'),r1=document.getElementById('tr1'),r2=document.getElementById('tr2'),trim=document.getElementById('trim'),MAXL=15;
+  function lab(){document.getElementById('ts').textContent=(+r1.value).toFixed(1);document.getElementById('te').textContent=(+r2.value).toFixed(1)}
+  function isVideo(f){return f&&(String(f.type).indexOf('video')===0||/\.(mov|mp4|m4v|webm)$/i.test(f.name||''))}
+  document.getElementById('file').onchange=function(){
+    var f=this.files[0];
+    if(isVideo(f)){trim.style.display='block';tv.src=URL.createObjectURL(f)}
+    else{trim.style.display='none';tv.removeAttribute('src')}
+  };
+  tv.onloadedmetadata=function(){
+    var d=tv.duration||0;r1.max=r2.max=d;r1.value=0;r2.value=Math.min(d,MAXL);lab();
+    document.getElementById('tinfo').textContent='This video is '+d.toFixed(1)+' seconds. Choose up to '+MAXL+' seconds. It plays in slow motion with no sound.';
+    tv.currentTime=0.05;
+  };
+  function slide(me){
+    var s=+r1.value,e=+r2.value,d=+r1.max;
+    if(e-s>MAXL){if(me===r1)r2.value=s+MAXL;else r1.value=e-MAXL}
+    if(+r2.value-+r1.value<0.5){if(me===r1)r1.value=Math.max(0,+r2.value-0.5);else r2.value=Math.min(d,+r1.value+0.5)}
+    lab();tv.currentTime=+(me.value);
+  }
+  r1.oninput=function(){slide(r1)};r2.oninput=function(){slide(r2)};
+  document.getElementById('tprev').onclick=function(){
+    var e=+r2.value;tv.pause();tv.currentTime=+r1.value;tv.playbackRate=0.5;tv.muted=true;
+    tv.ontimeupdate=function(){if(tv.currentTime>=e){tv.pause();tv.ontimeupdate=null}};
+    tv.play().catch(function(){});
+  };
+
+  function b64(blob){return new Promise(function(res,rej){var r=new FileReader();r.onload=function(){res(String(r.result).split(',')[1])};r.onerror=rej;r.readAsDataURL(blob)})}
+  function shrink(file){
+    return createImageBitmap(file).then(function(bm){
+      var sc=Math.min(1,1600/Math.max(bm.width,bm.height)),c=document.createElement('canvas');
+      c.width=Math.round(bm.width*sc);c.height=Math.round(bm.height*sc);c.getContext('2d').drawImage(bm,0,0,c.width,c.height);
+      return new Promise(function(res){c.toBlob(function(b){res(b||file)},'image/jpeg',0.85)});
+    }).catch(function(){return file});
+  }
+  function slug(t){return t.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,40)}
+  function fail(r){
+    if(r.status===401||r.status===403)return 'GitHub refused the token. Check it has Contents: Read and write for this repository.';
+    if(r.status===404)return 'GitHub could not find the repository. Check the token is for this repository.';
+    return 'GitHub error '+r.status+'.';
+  }
+  function list(){
+    var ul=document.getElementById('manage');ul.textContent='';
+    if(!tok)return;
+    fetch(API,{headers:hdr()}).then(function(r){return r.ok?r.json():[]}).then(function(l){
+      l.filter(function(f){return f.type==='file'&&/\.(jpe?g|png|webp|gif|mp4|webm|mov|m4v)$/i.test(f.name)}).forEach(function(f){
+        var li=document.createElement('li'),sp=document.createElement('span'),b=document.createElement('button');
+        sp.textContent=f.name.replace(/^\d+-/,'');
+        b.className='btn ghost';b.textContent='Remove';
+        b.onclick=function(){
+          if(!confirm('Remove this moment?'))return;
+          fetch(API+'/'+encodeURIComponent(f.name),{method:'DELETE',headers:hdr(),body:JSON.stringify({message:'Remove a moment',sha:f.sha})})
+            .then(function(r){document.getElementById('upmsg').textContent=r.ok?'Removed. It disappears from the site in about a minute.':fail(r);list()});
+        };
+        li.appendChild(sp);li.appendChild(b);ul.appendChild(li);
+      });
+    }).catch(function(){});
+  }
+  list();
+  document.getElementById('up').onclick=async function(){
+    var fi=document.getElementById('file').files[0],msg=document.getElementById('upmsg'),btn=this;
+    if(!tok){msg.textContent='Paste and save your GitHub token first.';return}
+    if(!fi){msg.textContent='Choose a photo or video first.';return}
+    btn.disabled=true;
+    try{
+      var up=fi,ext='';
+      if(isVideo(fi)){
+        if(window.MediaRecorder&&pickMime()&&tv.videoWidth){
+          tv.pause();msg.textContent='Trimming\u2026 0%';
+          up=await clip(+r1.value,+r2.value,function(f){msg.textContent='Trimming\u2026 '+Math.round(f*100)+'%. Keep this page open.'});
+          if(up.size<5000)throw new Error('The trimmed video came out empty. Try another clip.');
+        }else{
+          if(fi.size>25*1024*1024){msg.textContent='Your browser can\u2019t trim videos and this one is over 25 MB. Use a shorter video.';btn.disabled=false;return}
+          up=new Blob([fi],{type:'video/mp4'});
+        }
+        ext=String(up.type).indexOf('webm')>=0?'.webm':'.mp4';
+      }else{
+        msg.textContent='Preparing the photo\u2026';
+        up=await shrink(fi);ext='.jpg';
+      }
+      if(up.size>25*1024*1024){msg.textContent='Still over 25 MB. Choose a shorter part.';btn.disabled=false;return}
+      msg.textContent='Uploading\u2026';
+      var name=Math.floor(Date.now()/1000)+'-'+(slug(document.getElementById('cap').value)||'moment')+ext;
+      var r=await fetch(API+'/'+encodeURIComponent(name),{method:'PUT',headers:hdr(),body:JSON.stringify({message:'Add a moment',content:await b64(up)})});
+      if(!r.ok)throw new Error(fail(r));
+      document.getElementById('file').value='';document.getElementById('cap').value='';trim.style.display='none';tv.removeAttribute('src');
+      msg.textContent='Added \u2665 It shows up on the site in about a minute. Refresh then.';
+      list();
+    }catch(e){msg.textContent='Upload failed: '+((e&&e.message)||'try again.')}
+    btn.disabled=false;
+  };
+})();
 
 // ---- floating hearts ----
 var cv=document.getElementById('hearts'),cx=cv.getContext('2d'),H=[];
