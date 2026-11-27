@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>Happy Anniversary, My Love</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,700;1,500&family=Great+Vibes&family=Caveat:wght@500;700&family=Nunito:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#2a050d;--red:#a3152a;--wine:#7a1426;--rose:#ff8aa5;--gold:#f2c879;--paper:#fbeee3;--ink:#3b0d17;--ink2:#6a2b38;--mute:#e9bec6;--tx:#fff1f0;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(1200px 800px at 50% -8%,#8a1428,var(--bg) 70%);background-color:var(--bg);color:var(--tx);font:400 17px/1.65 Nunito,system-ui,sans-serif;overflow-x:hidden}
+html,body{max-width:100%;overflow-x:hidden;overscroll-behavior-x:none;-webkit-text-size-adjust:100%}
+html,body,main,#gate{touch-action:manipulation}
+body.locked{overflow:hidden}
+body.locked main{display:none}
+h1,h2,h3{margin:0;font-weight:400}
+h2{font-family:'Great Vibes','Brush Script MT',cursive;font-size:clamp(46px,13vw,70px);line-height:1.05;color:#ffd9d4;margin-bottom:8px}
+section{max-width:720px;margin:0 auto;padding:68px 22px}
+.sub{color:var(--mute);margin:0 0 28px}
+.note2{font-size:14px;color:var(--mute);margin-top:12px}
+#hearts{position:fixed;inset:0;pointer-events:none;z-index:6}
+main{position:relative;z-index:1;overflow-x:clip}
+.btn{font:600 16px Nunito,sans-serif;border:0;border-radius:999px;padding:13px 24px;background:var(--rose);color:#3b0d17;cursor:pointer;min-height:48px}
+.btn.ghost{background:transparent;color:var(--tx);border:1.5px solid var(--mute)}
+.btn:focus-visible,input:focus-visible,summary:focus-visible,.env:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+input{font:400 17px Nunito,sans-serif;border-radius:999px;border:1.5px solid var(--mute);background:transparent;color:var(--tx);padding:13px 20px;min-height:48px;width:min(100%,280px);margin:0 6px 8px 0}
+input[type=range]{width:100%;padding:0;border:0;min-height:32px;margin:0;accent-color:var(--rose)}
+
+/* ---------- media frames (shared) ---------- */
+.fr{position:relative;aspect-ratio:1;overflow:hidden;background:#000}
+.fr img,.fr video,.reel img,.reel video,.herobg video,.herobg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 1.2s}
+.fr .on,.reel .on{opacity:1}
+.herobg .on{opacity:.4}
+.fr .vw,.reel .vw,.herobg .vw{position:absolute;inset:0;overflow:hidden;opacity:0;transition:opacity 1.2s}
+.vw img{display:none}
+.vw video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:1!important;border-radius:0}
+.fr .vw.on,.reel .vw.on{opacity:1}
+.herobg .vw.on{opacity:.45}
+.slot:empty{display:grid;place-items:center;background:#f1d3cf}
+.slot:empty::after{content:"\2665";font-size:44px;color:#c14a63}
+.bub .vw img,.vl .vw img,.slot.round .vw img{display:none}
+.bub .vw video,.vl .vw video,.slot.round .vw video{inset:0;width:100%;height:100%;object-fit:cover;border-radius:0}
+
+/* ---------- gate: envelope + question ---------- */
+#gate{position:fixed;inset:0;z-index:5;background:radial-gradient(900px 640px at 50% 40%,#8a1428,var(--bg));display:flex;align-items:center;justify-content:center;text-align:center;padding:24px;transition:opacity 1s;overflow:hidden}
+#gate.out{opacity:0;pointer-events:none}
+.gbox{position:relative;z-index:2}
+.env{position:relative;width:min(290px,76vw);height:190px;margin:0 auto;cursor:pointer;perspective:900px;filter:drop-shadow(0 18px 28px rgba(0,0,0,.55));transition:transform .8s,opacity .8s;animation:bob 5s ease-in-out infinite}
+.env i{position:absolute;display:block}
+.env .back{inset:0;background:#8a0f22;border-radius:8px}
+.env .pk{inset:0;background:#b11c33;clip-path:polygon(0 100%,50% 36%,100% 100%);border-radius:8px}
+.env .flap{left:0;right:0;top:0;height:62%;background:#c2243b;clip-path:polygon(0 0,100% 0,50% 100%);transform-origin:top;transition:transform .7s;border-radius:8px 8px 0 0}
+.env .seal{left:50%;top:54%;width:46px;height:46px;margin:-23px 0 0 -23px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#f7d98f,#b8862b);color:#8a0f22;display:grid;place-items:center;font-size:22px;transition:opacity .4s}
+.env.open{animation:none}
+.env.open .flap{transform:rotateX(180deg)}
+.env.open .seal{opacity:0}
+.hint{margin:20px 0 0;color:var(--mute);font:italic 500 22px 'Cormorant Garamond',serif}
+.env.gone{opacity:0;transform:translateY(40px)}
+@keyframes bob{50%{transform:translateY(-10px) rotate(1.5deg)}}
+.ask{display:none;background:var(--paper);color:var(--ink);border:2px solid var(--gold);outline:1px solid #c9a15a;outline-offset:-8px;border-radius:6px;padding:30px 22px 20px;width:min(360px,88vw);box-shadow:0 24px 50px rgba(0,0,0,.55);animation:rise .9s both}
+@keyframes rise{from{opacity:0;transform:translateY(40px)}}
+.ask h1{font:400 clamp(40px,12vw,58px)/1 'Great Vibes',cursive;color:var(--red)}
+.ask p{color:var(--ink2);margin:12px 0 0}
+.ask .btn.ghost{color:var(--ink);border-color:var(--red)}
+.grow{position:relative;height:104px;margin-top:10px}
+.grow button{position:absolute;top:18px}
+#gyes{left:calc(50% - 118px)}
+#gno{left:calc(50% + 8px)}
+#gmsg{display:none;font:400 36px/1.1 'Great Vibes',cursive;color:var(--red)!important}
+.bub{position:absolute;z-index:1;border-radius:50%;overflow:hidden;border:4px solid var(--rose);box-shadow:0 0 30px rgba(255,138,165,.5);animation:bob 7s ease-in-out infinite}
+.bub .fr{width:100%;height:100%}
+
+/* ---------- hero / end ---------- */
+.hero,.end{position:relative;min-height:94vh;display:flex;flex-direction:column;justify-content:center;text-align:center}
+.herobg{position:absolute;top:0;bottom:0;left:50%;width:100vw;margin-left:-50vw;z-index:-1;overflow:hidden}
+.herobg::after{content:"";position:absolute;inset:0;background:linear-gradient(rgba(42,5,13,.25),var(--bg))}
+.hero h1,.end h2{font-family:'Great Vibes',cursive;font-size:clamp(62px,19vw,124px);line-height:.95;color:#fff;text-shadow:0 4px 30px rgba(0,0,0,.5)}
+.hero p{color:#ffe3e0;max-width:28ch;margin:18px auto 0;font:italic 500 23px/1.3 'Cormorant Garamond',serif}
+
+/* ---------- letter ---------- */
+.letter{display:grid;gap:20px;background:var(--paper);color:var(--ink);border-radius:6px;padding:26px 22px;box-shadow:0 20px 44px rgba(0,0,0,.5);outline:1px solid #b88a4a;outline-offset:-10px}
+.letter .slot{max-width:230px;margin:0 auto;width:100%;border-radius:50% / 42%;border:4px solid #fff}
+.letter h3{font:400 44px 'Great Vibes',cursive;color:var(--red)}
+.letter p{margin:10px 0 0;font:italic 500 21px/1.45 'Cormorant Garamond',serif}
+
+/* ---------- polaroid wall ---------- */
+.pcard{position:relative;background:#fff6f0;color:var(--ink);padding:12px 12px 18px;border-radius:3px;box-shadow:0 14px 30px rgba(0,0,0,.5);max-width:330px;margin:0 auto 40px;opacity:0;transform:translateY(34px) rotate(calc(var(--r) * 2));transition:opacity .8s,transform .9s cubic-bezier(.2,.9,.3,1.2)}
+.pcard.in{opacity:1;transform:rotate(var(--r))}
+.pcard::before{content:"";position:absolute;top:-10px;left:50%;margin-left:-9px;width:18px;height:18px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#ff8aa5,#a3152a);box-shadow:0 3px 5px rgba(0,0,0,.5);z-index:2}
+.pcard h3{font:400 38px 'Great Vibes',cursive;color:var(--red);margin-top:10px}
+.pcard p{margin:2px 0 0;font:500 22px/1.2 Caveat,cursive;color:#4a2a30}
+.pcard small{color:var(--ink2);font-size:13px}
+
+/* ---------- counter ---------- */
+.count{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;text-align:center}
+.count div{background:rgba(0,0,0,.28);border:1px solid rgba(242,200,121,.5);border-radius:16px;padding:16px 4px}
+.count b{display:block;font:700 clamp(30px,8vw,48px)/1 'Cormorant Garamond',serif;color:var(--gold)}
+.count span{font-size:13px;color:var(--mute)}
+
+/* ---------- film strip ---------- */
+.film{position:relative;background:#120406;padding:30px 20px;border-radius:6px;max-width:440px;margin:0 auto;box-shadow:0 20px 44px rgba(0,0,0,.5)}
+.film::before,.film::after{content:"";position:absolute;left:0;right:0;height:12px;background:repeating-linear-gradient(90deg,#f5e6e0 0 10px,transparent 10px 24px)}
+.film::before{top:9px}.film::after{bottom:9px}
+.reel{position:relative;aspect-ratio:4/5;overflow:hidden;display:none;background:#000;border-radius:2px}
+#reelcap{text-align:center;font:400 34px/1.1 'Great Vibes',cursive;color:var(--gold);margin:14px 0 0;min-height:36px}
+.script{font:400 clamp(30px,8vw,40px)/1.1 'Great Vibes',cursive;color:#ffd9d4;text-align:center;margin:0 0 18px}
+
+/* ---------- paper notes ---------- */
+.paper{position:relative;background:var(--paper);color:var(--ink);padding:24px 20px 20px;max-width:360px;margin:0 auto 34px;box-shadow:0 14px 30px rgba(0,0,0,.5);transform:rotate(var(--r,-1.5deg))}
+.paper::before{content:"";position:absolute;top:-12px;left:50%;width:92px;height:26px;margin-left:-46px;background:rgba(255,226,170,.75);transform:rotate(-3deg)}
+.paper h3{font:400 38px 'Great Vibes',cursive;color:var(--red)}
+.paper p{margin:4px 0 0;font:500 23px/1.25 Caveat,cursive;color:#3f1d25}
+
+/* ---------- vinyl ---------- */
+.vinyl{position:relative;width:min(300px,78vw);aspect-ratio:1;margin:6px auto 0;border-radius:50%;background:repeating-radial-gradient(#0d0d0d 0 3px,#202020 3px 5px);box-shadow:0 20px 44px rgba(0,0,0,.6);animation:spin 10s linear infinite}
+.vl{position:absolute;inset:31%;border-radius:50%;overflow:hidden;border:3px solid #a3152a}
+.vinyl::after{content:"";position:absolute;left:50%;top:50%;width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;background:#120406;z-index:3}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ---------- cards and lists ---------- */
+.fav{display:grid;gap:12px}
+.fav div{background:rgba(0,0,0,.25);border:1.5px dashed var(--rose);border-radius:16px;padding:16px 20px}
+.fav h3{font:400 34px 'Great Vibes',cursive;color:#ffd9d4}
+.fav p{margin:0}
+.card{background:var(--paper);color:var(--ink);border-radius:6px;padding:30px 22px;text-align:center;min-height:170px;display:flex;align-items:center;justify-content:center;font:italic 500 clamp(24px,6vw,30px)/1.25 'Cormorant Garamond',serif;margin-bottom:18px;box-shadow:0 14px 30px rgba(0,0,0,.45)}
+details{background:var(--paper);color:var(--ink);border-radius:6px;padding:14px 20px;margin-bottom:12px;box-shadow:0 8px 18px rgba(0,0,0,.35)}
+summary{cursor:pointer;font:400 32px 'Great Vibes',cursive;color:var(--red);line-height:1.3}
+details p{margin:8px 0 2px;font:500 22px/1.25 Caveat,cursive}
+.q{background:rgba(0,0,0,.28);border-radius:20px;padding:24px}
+.q h3{font:700 26px 'Cormorant Garamond',serif;margin-bottom:14px}
+.opts{display:grid;gap:10px}
+.opts button{font:600 16px Nunito,sans-serif;text-align:left;border:1.5px solid #8a3a4a;background:transparent;color:var(--tx);border-radius:14px;padding:13px 16px;cursor:pointer;min-height:48px}
+.opts button.ok{background:#2e7d5b;border-color:#2e7d5b}
+.opts button.no{background:#5a0f22;border-color:#5a0f22}
+ul.bl{list-style:none;padding:0;margin:0}
+ul.bl li{padding:12px 0;border-bottom:1px solid #6a1a2c;cursor:pointer;display:flex;gap:12px;align-items:center;min-height:48px}
+ul.bl li.done{color:var(--mute);text-decoration:line-through}
+ul.bl li i{font-style:normal;width:26px;height:26px;border:2px solid var(--rose);border-radius:50%;display:grid;place-items:center;flex:none;font-size:14px}
+ul.bl li.done i{background:var(--rose);color:#3b0d17}
+
+/* ---------- strips ---------- */
+.strip{display:none;overflow:hidden;gap:22px;padding:34px 22px;justify-content:center}
+.pol{flex:none;width:min(190px,42vw);background:#fff6f8;padding:8px 8px 4px;border-radius:4px;box-shadow:0 8px 22px rgba(0,0,0,.45)}
+.pol span{display:block;color:#4a2342;font:500 22px Caveat,cursive;text-align:center;padding:4px 0;min-height:32px}
+
+/* ---------- uploader ---------- */
+#trim{margin:14px 0;display:none}
+#tv{display:block;width:100%;max-width:300px;max-height:260px;border-radius:12px;background:#000;margin-bottom:10px}
+#trim label{display:block;font-size:14px;color:var(--mute);margin-top:8px}
+#manage{list-style:none;padding:0;margin:16px 0 0;font-size:14px}
+#manage li{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:6px 0;border-bottom:1px solid #6a1a2c}
+#manage button{font-size:12px;padding:4px 12px;min-height:32px}
+footer{text-align:center;padding:30px 22px 70px;color:var(--mute);font:400 34px 'Great Vibes',cursive}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}#hearts{display:none}.bub,.env,.vinyl{animation:none}.pcard{opacity:1;transform:rotate(var(--r))}}
+</style>
+</head>
+<body class="locked">
+<canvas id="hearts" aria-hidden="true"></canvas>
+<button id="mbtn" aria-label="Music on or off" style="display:none;position:fixed;right:14px;bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:7;width:48px;height:48px;border-radius:50%;border:1.5px solid var(--rose);background:rgba(42,5,13,.85);color:var(--rose);font-size:22px;cursor:pointer">&#9835;</button>
+
+<div id="gate" role="dialog" aria-label="A letter for you">
+  <div id="gbub" aria-hidden="true"></div>
+  <div class="gbox">
+    <div id="envwrap">
+      <div class="env" id="env" role="button" tabindex="0" aria-label="Open the envelope"><i class="back"></i><i class="pk"></i><i class="flap"></i><i class="seal">&#9829;</i></div>
+      <p class="hint" id="hint">You got mail. Tap to open it.</p>
+    </div>
+    <div class="ask" id="ask">
+      <h1>Would you be my girlfriend?</h1>
+      <p>I waited out your whole October once. I&rsquo;d do it again, but I&rsquo;m asking now.</p>
+      <div class="grow">
+        <button class="btn" id="gyes">Yes, always</button>
+        <button class="btn ghost" id="gno">No</button>
+      </div>
+      <p id="gmsg">I knew it. Come in, my love &#9829;</p>
+    </div>
+  </div>
+</div>
+
+<main>
+<section class="hero">
+  <div class="herobg" aria-hidden="true"></div>
+  <h1>Happy Anniversary, My Love</h1>
+  <p id="heroyrs">From a new classroom in Kabowa to here.</p>
+</section>
+
+<section>
+  <div class="letter">
+    <div class="fr slot round" data-o="0"></div>
+    <div>
+      <h3>My dearest,</h3>
+      <p>On my first day in Form 4, I saw you and you stood out of the whole class. I didn&rsquo;t know yet that I was looking at my future. You made me wait the whole of October, and it was the best waiting of my life.</p>
+      <p>Thank you for every laugh, for every fight we found our way back from, and for keeping me sane. Happy anniversary. I love you.</p>
+      <p style="text-align:right">Yours, always.</p>
+    </div>
+  </div>
+</section>
+
+<div class="strip"></div>
+
+<section id="timeline">
+  <h2>How it began</h2>
+  <p class="sub">Pinned in the order it happened.</p>
+  <div class="pcard" style="--r:-2.5deg"><div class="fr slot" data-o="1"></div><h3>Form 4, day one</h3><p>St. Kizito SS, Kabowa. We were both new, and you stood out of the whole class.</p></div>
+  <div class="pcard" style="--r:2deg"><div class="fr slot" data-o="2"></div><h3>September</h3><p>I told you how I felt. My heart was louder than the whole school.</p></div>
+  <div class="pcard" style="--r:-1.5deg"><div class="fr slot" data-o="3"></div><h3>October</h3><p>You made me prove my patience, all month long. Worth every day.</p></div>
+  <div class="pcard" style="--r:2.5deg"><div class="fr slot" data-o="4"></div><h3>November 2021</h3><p>You said yes. We&rsquo;ve been us ever since.</p></div>
+</section>
+
+<section id="count">
+  <h2>Time with you</h2>
+  <p class="sub">Counting since November 2021, the month you said yes.</p>
+  <div class="count" role="timer" aria-live="off">
+    <div><b id="cd">0</b><span>days</span></div>
+    <div><b id="ch">0</b><span>hours</span></div>
+    <div><b id="cm">0</b><span>minutes</span></div>
+    <div><b id="cs">0</b><span>seconds</span></div>
+  </div>
+  <p class="note2">We both forgot the exact day, so this counts from 1 November 2021. We can pick the real one together.</p>
+  <p id="next" class="script" style="margin-top:22px"></p>
+</section>
+
+<section id="memories">
+  <h2>My favorite person</h2>
+  <p class="sub">Our life together, playing on its own. Videos play in slow motion, without sound.</p>
+  <div class="film"><div class="reel" id="reel"></div></div>
+  <p id="reelcap"></p>
+  <p id="galnote" class="note2" style="text-align:center"></p>
+  <div style="text-align:center"><button class="btn" id="playbtn" type="button" style="display:none;margin-top:12px">&#9654; Tap to play the video</button></div>
+  </section>
+
+<section>
+  <h2>The rough parts too</h2>
+  <p class="sub">We&rsquo;ve broken up three times. The honest record.</p>
+  <div class="paper" style="--r:-2deg"><h3>The tote bag</h3><p>You wanted one tote bag, I bought another. The wrong bag ended us once. Now I ask for a photo first.</p></div>
+  <div class="paper" style="--r:1.8deg"><h3>The hair money</h3><p>The biggest one. We were both frustrated and almost didn&rsquo;t come back. But we didn&rsquo;t block each other.</p></div>
+  <div class="paper" style="--r:-1deg"><h3>The TikTok block</h3><p>Okay, I did block you on TikTok. You still bring it up, and I still deserve it. &#128517;</p></div>
+  <div class="paper" style="--r:2deg"><h3>The third one</h3><p>Neither of us remembers what it was about. That says how much it mattered.</p></div>
+  <p class="note2" style="text-align:center">Each time, we found our way back. You keep me sane, and I try to do the same for you.</p>
+</section>
+
+<div class="strip"></div>
+
+<section>
+  <h2>This song reminds me of you</h2>
+  <p class="sub" id="songline"></p>
+  <div class="vinyl"><div class="vl fr slot round" data-o="2"></div></div>
+</section>
+
+<section>
+  <h2>All the things that are you</h2>
+  <p class="sub">The small things I notice.</p>
+  <div class="fav">
+    <div><h3>You, dancing and singing</h3><p>My favourite show. I could watch you do it all day, and I do.</p></div>
+    <div><h3>Composed and beautiful</h3><p>You like being mature and put together, and I love you in that state. I&rsquo;ve even given up movies and pizza. Maybe I&rsquo;m maturing too. &#128579;</p></div>
+    <div><h3>Your sweet tooth</h3><p>Chocolate, ice cream, sweets, even with the teeth issues. I&rsquo;ll still buy them, and still remind you to brush. &#127851;&#127846;</p></div>
+    <div><h3>Happy and sad in seconds</h3><p>You&rsquo;re the only person who can do both to me seconds apart. I wouldn&rsquo;t trade it.</p></div>
+  </div>
+</section>
+
+<section>
+  <h2>Reasons I love you</h2>
+  <p class="sub">Tap for another one.</p>
+  <div class="card" id="reason">Tap the button to begin.</div>
+  <button class="btn" id="rbtn">Show me a reason</button>
+</section>
+
+<section>
+  <h2>Open when&hellip;</h2>
+  <p class="sub">Little letters for the moments you need me.</p>
+  <details><summary>&hellip;you miss me</summary><p>Close your eyes and think of the first time you laughed at something I said. I&rsquo;m already thinking of you.</p></details>
+  <details><summary>&hellip;you had a bad day</summary><p>You are stronger than today. Breathe, drink some water, and know I&rsquo;m proud of you however it went.</p></details>
+  <details><summary>&hellip;you can&rsquo;t sleep</summary><p>Rest, my love. Whatever is on your mind will still be there tomorrow, and so will I.</p></details>
+  <details><summary>&hellip;we&rsquo;ve just had a fight</summary><p>Remember the tote bag, the hair money and TikTok. We always find our way back. I&rsquo;m sorry for my part, and I love you more than whatever it was about.</p></details>
+  <details><summary>&hellip;you doubt my love</summary><p>I waited out your October, didn&rsquo;t I? I&rsquo;d do it all again.</p></details>
+</section>
+
+<div class="strip"></div>
+
+<section>
+  <h2>How well do you know us?</h2>
+  <p class="sub">Four questions. No pressure, my love.</p>
+  <div class="q" id="quiz"></div>
+</section>
+
+<section>
+  <h2>Our future list</h2>
+  <p class="sub">Tap to tick one off.</p>
+  <ul class="bl" id="bl"></ul>
+</section>
+
+<section id="wish">
+  <h2>Your wishlist</h2>
+  <p class="sub">Things and gifts you&rsquo;d love next year. Add as many as you want, my love.</p>
+  <div><input id="winp" type="text" placeholder="I would love&hellip;" aria-label="Add a wish" maxlength="120"><button class="btn" id="wadd" type="button">Add</button></div>
+  <ul class="bl" id="wl"></ul>
+  <button class="btn ghost" id="wsend" type="button" style="margin-top:16px">Send my wishlist to him</button>
+  <p class="note2" id="wnote">It&rsquo;s saved on this phone. Tap send when you&rsquo;re ready.</p>
+</section>
+
+<section class="end">
+  <div class="herobg" aria-hidden="true"></div>
+  <h2>Happy Anniversary, My Love</h2>
+  <p class="sub" style="font:italic 500 23px 'Cormorant Garamond',serif">Here&rsquo;s to every year after this one.</p>
+</section>
+<footer>I love you &#9829;</footer>
+</main>
+
+<script>
+// ---- Edit these as you remember more ----
+var START = new Date(2021, 10, 1);   // 1 Nov 2021, change when you find the real date
+var SONG = "Dandelions (Instrumental), Ruth B.";
+var SONG_URL = "song.m4a";
+var REASONS = ["The way you stood out the very first day.","You dance like nobody is watching, and I\u2019m the one watching.","You keep me sane when everything else is loud.","Even your sweet tooth is adorable.","You stay composed, and I love you in that state.","You made me earn it, and that made it mean more.","Your laugh fixes my worst days.","You\u2019re kind even when no one is watching.","The way you roll your eyes and smile anyway."];
+var QUIZ = [
+ {q:"What did we once break up over?",a:["A tote bag","A school trip","A song"],c:0},
+ {q:"Where did I block you, and you never let me forget?",a:["WhatsApp","TikTok","Instagram"],c:1},
+ {q:"Where did I first see you?",a:["On the school bus","In class at St. Kizito, Kabowa","At a party"],c:1},
+ {q:"How long did you make me wait?",a:["A week","The whole of October","One day"],c:1}
+];
+var LIST = [["Go to Jinja, or anywhere, for a short weekend vacation",false],["Graduate and be forever happily ever after",false],["Dance together all night, just you and me",false],["Have an ice cream and chocolate date (we brush after)",false],["Cook a full meal together",false],["Watch the sunrise together",false],["Find our real anniversary date and celebrate it every year",false]];
+document.getElementById('songline').textContent=SONG;
+
+// ---- counter ----
+function tick(){
+  var d=Math.max(0,Date.now()-START.getTime()),s=Math.floor(d/1000);
+  document.getElementById('cd').textContent=Math.floor(s/86400);
+  document.getElementById('ch').textContent=Math.floor(s%86400/3600);
+  document.getElementById('cm').textContent=Math.floor(s%3600/60);
+  document.getElementById('cs').textContent=s%60;
+  var n=new Date(),a=new Date(n.getFullYear(),10,1);
+  if(a<n)a=new Date(n.getFullYear()+1,10,1);
+  document.getElementById('next').textContent=(n.getMonth()===10)?'It\u2019s our anniversary month \u2665':Math.ceil((a-n)/86400000)+' days to our anniversary';
+}
+tick();setInterval(tick,1000);
+(function(){
+  var y=Math.floor((Date.now()-START.getTime())/31557600000),W=['Zero','One','Two','Three','Four','Five','Six','Seven','Eight','Nine','Ten'];
+  if(y>0)document.getElementById('heroyrs').textContent=(W[y]||y)+' year'+(y>1?'s':'')+' since you said yes, and still my favourite person.';
+})();
+
+// ---- reasons ----
+var ri=-1;
+document.getElementById('rbtn').onclick=function(){
+  var i;do{i=Math.floor(Math.random()*REASONS.length)}while(i===ri&&REASONS.length>1);
+  ri=i;document.getElementById('reason').textContent=REASONS[i];
+};
+
+// ---- quiz ----
+var qi=0,score=0,qz=document.getElementById('quiz');
+function showQ(){
+  if(qi>=QUIZ.length){qz.innerHTML='<h3>You got '+score+' of '+QUIZ.length+'</h3><p>'+(score===QUIZ.length?'Perfect. You know us by heart. \u2665':'Close enough. I\u2019ll remind you of the rest, forever.')+'</p><button class="btn ghost" id="again">Play again</button>';
+    document.getElementById('again').onclick=function(){qi=0;score=0;showQ()};return}
+  var q=QUIZ[qi];
+  qz.innerHTML='<h3>'+q.q+'</h3><div class="opts"></div>';
+  var box=qz.querySelector('.opts');
+  q.a.forEach(function(t,i){
+    var b=document.createElement('button');b.textContent=t;
+    b.onclick=function(){
+      var all=box.children;for(var k=0;k<all.length;k++)all[k].disabled=true;
+      if(i===q.c){b.className='ok';score++}else{b.className='no';all[q.c].className='ok'}
+      setTimeout(function(){qi++;showQ()},1100);
+    };
+    box.appendChild(b);
+  });
+}
+showQ();
+
+// ---- list ----
+var bl=document.getElementById('bl');
+LIST.forEach(function(x){
+  var li=document.createElement('li');
+  li.innerHTML='<i>\u2713</i><span></span>';li.querySelector('span').textContent=x[0];
+  if(x[1])li.className='done';
+  li.onclick=function(){li.classList.toggle('done')};
+  bl.appendChild(li);
+});
+
+// ---- polaroids drop in when seen ----
+(function(){
+  var cards=document.querySelectorAll('.pcard');
+  if(!('IntersectionObserver' in window)){cards.forEach(function(c){c.classList.add('in')});return}
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.25});
+  cards.forEach(function(c){io.observe(c)});
+})();
+
+// ---- our song: slow, soft, plays while she is on the site ----
+var song=null,SONGB=null,songMuted=false;
+if(SONG_URL)fetch(SONG_URL).then(function(r){return r.blob()}).then(function(b){SONGB=URL.createObjectURL(new Blob([b],{type:'audio/mp4'}))}).catch(function(){});
+function songGo(){
+  if(!song||songMuted)return;
+  if(SONGB&&song.src!==SONGB){song.src=SONGB}
+  var p=song.play();if(p&&p.catch)p.catch(function(){});
+}
+function startSong(){
+  if(!SONG_URL)return;
+  song=new Audio();song.loop=true;song.volume=0.7;song.preload='auto';
+  song.src=SONGB||SONG_URL;
+  var b=document.getElementById('mbtn');b.style.display='block';
+  songGo();
+  b.onclick=function(e){e.stopPropagation();if(song.paused){songMuted=false;songGo();b.style.opacity=1}else{songMuted=true;song.pause();b.style.opacity=0.5}};
+  // if the phone blocked it, the next touch starts it
+  ['touchstart','click'].forEach(function(ev){document.addEventListener(ev,function(){if(song&&song.paused&&!songMuted)songGo()},{passive:true})});
+  document.addEventListener('visibilitychange',function(){if(document.hidden)song.pause();else songGo()});
+}
+
+// ---- opening: envelope, then the question ----
+var env=document.getElementById('env'),gno=document.getElementById('gno');
+function openEnv(){
+  if(env.classList.contains('open'))return;
+  env.classList.add('open');unlockVideos();
+  document.getElementById('hint').style.display='none';
+  setTimeout(function(){env.classList.add('gone')},800);
+  setTimeout(function(){document.getElementById('envwrap').style.display='none';document.getElementById('ask').style.display='block'},1500);
+}
+env.onclick=openEnv;
+env.onkeydown=function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();openEnv()}};
+function bubbles(all){
+  var gb=document.getElementById('gbub');gb.textContent='';
+  if(!all.length)return;
+  var POS=[[2,3,190,38],[5,57,210,41],[14,35,110,24],[71,2,200,40],[75,56,210,42],[80,35,110,24]];
+  POS.forEach(function(p,i){
+    var list=pick(all,0,5);
+    var w=document.createElement('div');w.className='bub';
+    w.style.cssText='top:'+p[0]+'%;left:'+p[1]+'%;width:min('+p[2]+'px,'+p[3]+'vw);height:min('+p[2]+'px,'+p[3]+'vw);animation-delay:-'+(i*1.1)+'s';
+    var fr=document.createElement('div');fr.className='fr';
+    list.forEach(function(m){fr.appendChild(mk(m))});
+    w.appendChild(fr);gb.appendChild(w);
+    cycle(fr,list,4500+i*600,i*500);
+  });
+}
+function dodge(e){
+  e.preventDefault();
+  var row=gno.parentNode,w=row.clientWidth-gno.offsetWidth,h=row.clientHeight-gno.offsetHeight;
+  gno.style.left=Math.random()*Math.max(w,0)+'px';gno.style.top=Math.random()*Math.max(h,0)+'px';
+}
+gno.addEventListener('mouseover',dodge);gno.addEventListener('touchstart',dodge,{passive:false});gno.addEventListener('click',dodge);
+document.getElementById('gyes').onclick=function(){
+  this.style.display='none';gno.style.display='none';unlockVideos();startSong();
+  document.getElementById('gmsg').style.display='block';
+  for(var i=0;i<45;i++)spawn(true);
+  setTimeout(function(){
+    var g=document.getElementById('gate');g.classList.add('out');
+    document.body.classList.remove('locked');window.scrollTo(0,0);setTimeout(kick,150);
+    setTimeout(function(){g.style.display='none'},1000);
+  },2000);
+};
+
+// ---- photos and videos everywhere, random, never the same one twice at once ----
+var timers=[],rt=null,SH=[],deck=[],di=0,BP={};
+function vid(e){return e.tagName==='VIDEO'?e:(e.querySelector?e.querySelector('video'):null)}
+// Fetch media as a blob so iPhones play it even without range-request support
+function blobFor(url,type){
+  if(!BP[url])BP[url]=fetch(url).then(function(r){return r.blob()}).then(function(b){return URL.createObjectURL(new Blob([b],{type:type||'video/mp4'}))});
+  return BP[url];
+}
+function load(v){
+  if(!v.dataset.u||v.dataset.ok)return;v.dataset.ok='1';
+  blobFor(v.dataset.u,v.dataset.t).then(function(u){
+    v.src=u;
+    if(v.closest('.vw.on')){var p=v.play();if(p&&p.catch)p.catch(function(){})}
+  }).catch(function(){v.src=v.dataset.u});
+}
+function mk(m){
+  if(String(m.type).indexOf('video')===0){
+    var w=document.createElement('div');w.className='vw';
+    var v=document.createElement('video');
+    v.muted=true;v.defaultMuted=true;v.loop=true;v.playsInline=true;v.autoplay=true;
+    v.setAttribute('playsinline','');v.setAttribute('webkit-playsinline','');v.setAttribute('autoplay','');v.setAttribute('muted','');
+    v.preload='auto';v.defaultPlaybackRate=0.5;v.playbackRate=0.5;
+    v.dataset.u=m.url;v.dataset.t=String(m.type||'video/mp4').split(';')[0];
+    w.appendChild(v);return w;
+  }
+  var e=document.createElement('img');e.alt=m.caption||'Us';e.src=m.url;return e;
+}
+function on(e,y){
+  e.classList.toggle('on',y);
+  var v=vid(e);
+  if(v){if(y){load(v);v.muted=true;v.playbackRate=0.5;var p=v.play();if(p&&p.catch)p.catch(function(){})}else v.pause()}
+}
+function setShown(box,key){
+  for(var i=0;i<SH.length;i++)if(SH[i].box===box){SH[i].key=key;return}
+  SH.push({box:box,key:key});
+}
+function usedKeys(box){
+  return SH.filter(function(x){return x.box!==box&&x.box.getClientRects().length}).map(function(x){return x.key});
+}
+// choose a random item that no other frame is showing right now
+function chooseIdx(box,list,cur){
+  var u=usedKeys(box),c=[],i;
+  for(i=0;i<list.length;i++)if(i!==cur&&u.indexOf(list[i].url)<0)c.push(i);
+  if(!c.length)for(i=0;i<list.length;i++)if(i!==cur)c.push(i);
+  return c.length?c[Math.floor(Math.random()*c.length)]:Math.max(cur,0);
+}
+function cycle(box,list,ms,start,cb){
+  var a=box.children,cur=-1;if(!a.length)return;
+  function show(n){if(cur>=0)on(a[cur],false);cur=n;on(a[n],true);setShown(box,list[n].url);if(cb)cb(list[n])}
+  show(chooseIdx(box,list,-1));
+  if(a.length<2)return;
+  function go(){show(chooseIdx(box,list,cur));timers.push(setTimeout(go,ms))}
+  timers.push(setTimeout(go,ms+start));
+}
+function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t}return a}
+// deal from a shuffled deck so different frames get different items
+function pick(all,o,n){
+  n=Math.min(all.length,n);var l=[],guard=0;
+  while(l.length<n&&guard++<500){
+    if(di>=deck.length){deck=shuffle(all.slice());di=0}
+    var m=deck[di++];if(l.indexOf(m)<0)l.push(m);
+  }
+  return l;
+}
+function paint(){
+  timers.forEach(clearTimeout);timers=[];SH=[];deck=[];di=0;
+  var all=window.MEMS||[];
+  bubbles(all);
+  document.querySelectorAll('.slot').forEach(function(s,si){
+    s.textContent='';if(!all.length)return;
+    var list=pick(all,0,5);
+    list.forEach(function(m){s.appendChild(mk(m))});
+    cycle(s,list,5200+si*400,si*600);
+  });
+  document.querySelectorAll('.herobg').forEach(function(hb,hi){
+    hb.textContent='';if(!all.length)return;
+    var list=pick(all,0,8);
+    list.forEach(function(m){hb.appendChild(mk(m))});
+    cycle(hb,list,6000,hi*900);
+  });
+  document.querySelectorAll('.strip').forEach(function(s,si){
+    s.textContent='';
+    if(!all.length){s.style.display='none';return}
+    s.style.display='flex';
+    for(var p=0;p<2;p++){
+      var list=pick(all,0,4);
+      var pol=document.createElement('div');pol.className='pol';
+      pol.style.transform='rotate('+(p?2.5:-2.5)+'deg)';
+      var fr=document.createElement('div');fr.className='fr';
+      list.forEach(function(m){fr.appendChild(mk(m))});
+      var cap=document.createElement('span');
+      pol.appendChild(fr);pol.appendChild(cap);s.appendChild(pol);
+      cycle(fr,list,5000+p*1500,si*700+p*1200,function(cp){return function(m){cp.textContent=m.caption||'\u2665'}}(cap));
+    }
+  });
+  var reel=document.getElementById('reel'),rc=document.getElementById('reelcap');
+  clearTimeout(rt);reel.textContent='';rc.textContent='';
+  if(!all.length){reel.style.display='none';return}
+  reel.style.display='block';
+  all.forEach(function(m){var e=mk(m),v=vid(e);if(v){v.loop=false;v.onerror=function(){if(kids[cur]===e)next()}}reel.appendChild(e)});
+  var kids=reel.children,cur=-1;
+  function show(i){
+    for(var k=0;k<kids.length;k++)on(kids[k],k===i);
+    cur=i;rc.textContent=all[i].caption||'';setShown(reel,all[i].url);
+    var v=vid(kids[i]);clearTimeout(rt);
+    if(v){try{v.currentTime=0}catch(e){}v.onended=next;rt=setTimeout(next,70000)}
+    else rt=setTimeout(next,5000);
+  }
+  function next(){show(chooseIdx(reel,all,cur))}
+  show(chooseIdx(reel,all,-1));
+}
+// keep visible videos playing (phones pause them while hidden or until a tap)
+function kick(){
+  document.querySelectorAll('.vw.on video').forEach(function(v){
+    if(v.paused&&!v.ended){load(v);v.muted=true;v.playbackRate=0.5;var p=v.play();if(p&&p.catch)p.catch(function(){})}
+  });
+}
+setInterval(kick,1500);
+document.addEventListener('touchstart',kick,{passive:true});
+document.addEventListener('click',kick);
+document.addEventListener('pointerdown',kick);
+function unlockVideos(){
+  document.querySelectorAll('video').forEach(function(v){
+    if(v.id==='tv')return;
+    v.muted=true;v.playbackRate=0.5;
+    var p=v.play();
+    if(p&&p.then)p.then(function(){if(!v.closest('.vw.on'))v.pause()}).catch(function(){});
+  });
+}
+function chk(){
+  var b=document.getElementById('playbtn'),v=document.querySelector('.reel .vw.on video');
+  b.style.display=(v&&v.paused)?'inline-block':'none';
+}
+setInterval(chk,1500);
+document.getElementById('playbtn').onclick=function(){kick();this.style.display='none'};
+
+// ---- photos and videos: read from the media folder ----
+(function(){
+  var EI=/\.(jpe?g|png|webp|gif|avif)$/i,EV=/\.(mp4|webm|mov|m4v)$/i;
+  function toMem(name){
+    var base=name.replace(/\.[^.]+$/,''),ext=name.split('.').pop().toLowerCase();
+    var cap=base.replace(/^\d+[-_ ]*/,'').replace(/[-_]+/g,' ').trim();
+    if(/^(img|vid|pxl|dsc|photo|image|screenshot)\b/i.test(cap)||/^[\d\s]+$/.test(cap))cap='';
+    var v=EV.test(name);
+    return {url:'media/'+encodeURIComponent(name),type:v?(ext==='webm'?'video/webm':'video/mp4'):'image/'+(ext==='jpg'?'jpeg':ext),caption:cap};
+  }
+  function done(names){
+    names=names.filter(function(n){return EI.test(n)||EV.test(n)});
+    window.MEMS=shuffle(names.map(toMem));
+    document.getElementById('galnote').textContent=names.length?'':'Add photos and videos to the media folder and they will appear here.';
+    paint();
+  }
+  function fallback(){fetch('media.json').then(function(r){return r.json()}).then(done).catch(function(){done([])})}
+  var m=location.hostname.match(/^(.+)\.github\.io$/);
+  if(m){
+    var owner=m[1],repo=location.pathname.split('/')[1]||(owner+'.github.io');
+    fetch('https://api.github.com/repos/'+owner+'/'+repo+'/contents/media')
+      .then(function(r){if(!r.ok)throw 0;return r.json()})
+      .then(function(l){done(l.map(function(f){return f.name}))})
+      .catch(fallback);
+  }else fallback();
+})();
+
+// ---- her wishlist (saved on her phone, sent with the share button) ----
+var WK='ourstory-wishes',WL=[];
+try{WL=JSON.parse(localStorage.getItem(WK)||'[]')}catch(e){WL=[]}
+function wsave(){try{localStorage.setItem(WK,JSON.stringify(WL))}catch(e){}}
+function wrender(){
+  var ul=document.getElementById('wl');ul.textContent='';
+  WL.forEach(function(t,i){
+    var li=document.createElement('li'),ic=document.createElement('i'),sp=document.createElement('span'),b=document.createElement('button');
+    ic.textContent='\u2665';sp.textContent=t;sp.style.flex='1';
+    b.className='btn ghost';b.textContent='\u2715';b.setAttribute('aria-label','Remove this wish');b.style.cssText='padding:2px 12px;min-height:36px';
+    b.onclick=function(){WL.splice(i,1);wsave();wrender()};
+    li.style.cursor='default';li.appendChild(ic);li.appendChild(sp);li.appendChild(b);ul.appendChild(li);
+  });
+}
+function wadd(){
+  var inp=document.getElementById('winp'),t=inp.value.trim();
+  if(!t)return;WL.push(t);inp.value='';wsave();wrender();
+}
+document.getElementById('wadd').onclick=wadd;
+document.getElementById('winp').onkeydown=function(e){if(e.key==='Enter')wadd()};
+document.getElementById('wsend').onclick=function(){
+  var n=document.getElementById('wnote');
+  if(!WL.length){n.textContent='Add at least one wish first.';return}
+  var text='My wishlist for next year \u2665\n'+WL.map(function(t,i){return (i+1)+'. '+t}).join('\n');
+  if(navigator.share){navigator.share({text:text}).catch(function(){})}
+  else if(navigator.clipboard){navigator.clipboard.writeText(text).then(function(){n.textContent='Copied. Paste it in a message to him.'},function(){n.textContent='Could not copy. Screenshot the list instead.'})}
+  else n.textContent='Screenshot the list and send it to him.';
+};
+wrender();
+
+// ---- no pinch zoom, no sideways drag ----
+['gesturestart','gesturechange','gestureend'].forEach(function(t){document.addEventListener(t,function(e){e.preventDefault()})});
+document.addEventListener('touchmove',function(e){if(e.touches&&e.touches.length>1)e.preventDefault()},{passive:false});
+if(window.scrollX)window.scrollTo(0,window.scrollY);
+addEventListener('scroll',function(){if(window.scrollX)window.scrollTo(0,window.scrollY)},{passive:true});
+
+// ---- floating hearts ----
+var cv=document.getElementById('hearts'),cx=cv.getContext('2d'),H=[];
+function size(){cv.width=innerWidth;cv.height=innerHeight}size();addEventListener('resize',size);
+function spawn(burst){H.push({x:Math.random()*cv.width,y:burst?cv.height*0.6:cv.height+20,s:8+Math.random()*14,v:(burst?1.5:0.4)+Math.random()*0.8,a:0.15+Math.random()*0.3,d:Math.random()*6})}
+function heart(x,y,s){cx.beginPath();cx.moveTo(x,y+s/4);cx.bezierCurveTo(x,y-s/2,x-s,y-s/2,x-s,y+s/4);cx.bezierCurveTo(x-s,y+s,x,y+s*1.2,x,y+s*1.5);cx.bezierCurveTo(x,y+s*1.2,x+s,y+s,x+s,y+s/4);cx.bezierCurveTo(x+s,y-s/2,x,y-s/2,x,y+s/4);cx.fill()}
+function loop(){
+  cx.clearRect(0,0,cv.width,cv.height);
+  if(H.length<22&&Math.random()<0.04)spawn(false);
+  for(var i=H.length-1;i>=0;i--){var h=H[i];h.y-=h.v;h.d+=0.02;
+    cx.fillStyle='rgba(255,138,165,'+h.a+')';heart(h.x+Math.sin(h.d)*14,h.y,h.s);
+    if(h.y<-40)H.splice(i,1)}
+  requestAnimationFrame(loop);
+}
+loop();
+</script>
+</body>
+</html>
